@@ -1,0 +1,25 @@
+post:
+      tags:
+      - Auth
+      summary: "POST /auth/login"
+      description: "Получить JWT"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                name:
+                  type: String
+                  required: true
+                  example: "user"
+                password:
+                  type: String
+                  required: true
+                  example: "pwd"
+      responses:
+        200:
+          headers:
+            Authorization: 
+              schema:
+                type: String 
+                example: Bearer eyJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJTaW1hYyIsImF1dGhvcml0aWVzIjpbIlJPTEVfVVNFUiJdLCJpYXQiOjE1NTUyNTk2OTMsImV4cCI6MTU1NTM0NjA5M30.QhpSea6RMjVKQoZeLjOMTvmuq6sZDOMONdzNWfRC57shIti4wVC5NKJR5P8dbMAMAoks4ikc7dtimFYNnzIl8ZFH9jL1Tzg5tUZM0vhR42stis3d8BqXWkKpPKQrvej3MP2tkTywlZZbIieoum-9raCZZufoGk6qQWOZSUYTS0CxH9cmSVFncqLdaczJ4WfmqQA0LkAz8ez9GJtHjZ5WylDR1pOsNQ70ydRWAI-QhVtEFNqpJgg_vPUN__x2H4giIz_M6YC2_fXG4rLS_lp4_0QmVMrPQ4uXo6rfsdBh4cGOcn8mOuu9Qh4X2Af8bWaFkVBkw1UK_SjmELmsv4KZlw

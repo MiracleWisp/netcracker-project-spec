@@ -1,0 +1,96 @@
+parameters:
+- in: path
+  name: chatId
+  required: true
+  schema:
+    type: integer
+
+get:
+  tags:
+  - Chat Playlist
+  summary: "GET /social/chats/{chatId}/playlist"
+  description: "Получить список участников чата"
+  responses:
+    200:
+      description: OK
+      content:
+        application/json:
+          schema:
+            properties:
+              successful:
+                type: boolean
+                example: true
+              data:
+                type: array
+                items:
+                - type: object
+                  example:
+                      username: Simac
+                - type: object
+                  example:
+                      username: Ira
+
+post:
+  tags:
+  - Chat Playlist
+  summary: "POST /social/chats/{chatId}/playlist"
+  description: "Добавить участника в чат. Возвращает обновленный список участников"
+  requestBody:
+    content:
+      application/json:
+        schema:
+          properties:
+            username:
+              type: String
+              required: true
+              example: "Simac"
+  responses:
+    200:
+      description: OK
+      content:
+        application/json:
+          schema:
+            properties:
+              successful:
+                type: boolean
+                example: true
+              data:
+                type: array
+                items:
+                - type: object
+                  example:
+                      username: Simac
+                - type: object
+                  example:
+                      username: Ira
+
+delete:
+  tags:
+  - Chat Playlist
+  summary: "DELETE /social/chats/{chatId}/playlist"
+  description: "Удаляет участника из чата. Можно выйти самому, либо админ может удалить любого. Возвращает обновленный список участников"
+  requestBody:
+    content:
+      application/json:
+        schema:
+          properties:
+            username:
+              type: String
+              required: true
+              example: "Simac"
+  responses:
+    200:
+      description: OK
+      content:
+        application/json:
+          schema:
+            properties:
+              successful:
+                type: boolean
+                example: true
+              data:
+                type: array
+                items:
+                - type: object
+                  example:
+                      username: Ira

@@ -1,0 +1,62 @@
+get:
+  tags:
+  - Chats
+  summary: "GET /social/chats"
+  description: "Получить список чатов текущего пользователя"
+  responses:
+    200:
+      description: OK
+      content:
+        application/json:
+          schema:
+            properties:
+              successful:
+                type: boolean
+                example: true
+              data:
+                type: array
+                items:
+                - type: object
+                  example:
+                    ChatId: 1
+                    chatName: "Имя для чата"
+                    owner: 
+                      username: Simac
+                - type: object
+                  example:
+                    ChatId: 2
+                    chatName: "Имя для чата 2"
+                    owner: 
+                      username: Ira
+
+post:
+  tags:
+  - Chats
+  summary: "POST /social/chats"
+  description: "Создание нового чата"
+  requestBody:
+    content:
+      application/json:
+        schema:
+          properties:
+            chatName:
+              type: String
+              required: true
+              example: "Имя для чата"
+  responses:
+    200:
+      description: OK
+      content:
+        application/json:
+          schema:
+            properties:
+              successful:
+                type: boolean
+                example: true
+              data:
+                type: object
+                example:
+                  ChatId: 2
+                  chatName: "Имя для чата"
+                  owner: 
+                    username: Simac

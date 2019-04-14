@@ -1,0 +1,71 @@
+parameters:
+- in: path
+  name: chatId
+  required: true
+  schema:
+    type: integer
+
+get:
+  tags:
+  - Chat Messages
+  summary: "GET /social/chats/{chatId}/messages"
+  parameters:
+  - in: query
+    description: "Unix time в миллисекундах, с которого нужно вернуть пачку сообщений"
+    name: since
+    required: true
+    schema:
+      type: long
+  description: "Получить список участников чата"
+  responses:
+    200:
+      description: OK
+      content:
+        application/json:
+          schema:
+            properties:
+              successful:
+                type: boolean
+                example: true
+              data:
+                type: array
+                items:
+                - type: object
+                  example:
+                      messageId: 25
+                      sender:
+                        username: Simac
+                      content: Привет
+                      chat:
+                        chatId: 2
+                        chatName: Название для чата
+                        owner:
+                          username: Ira
+                      sendTime: 1554315321762
+                      type: CHAT
+                - type: object
+                  example:
+                      messageId: 24
+                      sender:
+                        username: Simac
+                      content: Ira добавил(а) simac в чат
+                      chat:
+                        chatId: 2
+                        chatName: Название для чата
+                        owner:
+                          username: Ira
+                      sendTime: 1554315321761
+                      type: CHAT
+                - type: object
+                  example:
+                      messageId: 23
+                      sender:
+                        username: Simac
+                      content: Ira добавил(а) simac в чат
+                      chat:
+                        chatId: 2
+                        chatName: Название для чата
+                        owner:
+                          username: Ira
+                      sendTime: 1554315321760
+                      type: JOIN

@@ -9,8 +9,8 @@ info:
   license:
     name: Apache 2.0
     url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
-  x-logo:
-    url: 'https://apis.guru/openapi-template/logo.png'
+# x-logo:
+   #url: './logo.png'
   description: >
     This is an **example** API to demonstrate features of OpenAPI specification
 
@@ -53,10 +53,17 @@ externalDocs:
   description: Find out how to create Github repo for your OpenAPI spec.
   url: 'https://github.com/Rebilly/generator-openapi-repo'
 tags:
-  - name: Echo
-    description: Example echo operations
   - name: User
     description: Operations about user
+  - name: Auth
+    description: Регистрация и получение токена
+  - name: Chats
+    description: Взаимодействие с чатами
+  - name: Chat Participants
+    description: Управление участниками чата
+  - name: Chat Playlist
+    description: Управление плейлистом чата
+  - name: Chat Messages
+    description: Управление сообщениями чата
 servers:
-  - url: 'http://example.com/api/v1'
-  - url: 'https://example.com/api/v1'
+  - url: 'http://playmaker.gq:8080'
