@@ -9,8 +9,6 @@ info:
   license:
     name: Apache 2.0
     url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
-  x-logo:
-    url: 'https://apis.guru/openapi-template/logo.png'
   description: |
     This is an **example** API to demonstrate features of OpenAPI specification
     # Introduction
@@ -30,84 +28,395 @@ externalDocs:
   description: Find out how to create Github repo for your OpenAPI spec.
   url: 'https://github.com/Rebilly/generator-openapi-repo'
 tags:
-  - name: Echo
-    description: Example echo operations
   - name: User
     description: Operations about user
+  - name: Auth
+    description: Регистрация и получение токена
+  - name: Chats
+    description: Взаимодействие с чатами
+  - name: Chat Participants
+    description: Управление участниками чата
+  - name: Chat Playlist
+    description: Управление плейлистом чата
+  - name: Chat Messages
+    description: Управление сообщениями чата
 servers:
-  - url: 'http://example.com/api/v1'
-  - url: 'https://example.com/api/v1'
+  - url: 'http://playmaker.gq:8080'
 paths:
-  /echo:
+  /auth/login:
     post:
       tags:
-        - Echo
-      summary: Echo test
-      description: Receive the exact message you've sent
-      operationId: echo
-      security:
-        - api_key: []
-        - basic_auth: []
-      responses:
-        '200':
-          description: OK
-          headers:
-            X-Rate-Limit:
-              description: calls per hour allowed by the user
-              schema:
-                type: integer
-                format: int32
-            X-Expires-After:
-              $ref: '#/components/headers/ExpiresAfter'
-          content:
-            application/json:
-              schema:
-                type: string
-              examples:
-                response:
-                  value: Hello world!
-            application/xml:
-              schema:
-                type: string
-            text/csv:
-              schema:
-                type: string
+        - Auth
+      summary: POST /auth/login
+      description: Получить JWT
       requestBody:
         content:
           application/json:
             schema:
-              type: string
-              example: Hello world!
-          application/xml:
+              properties:
+                name:
+                  type: String
+                  required: true
+                  example: user
+                password:
+                  type: String
+                  required: true
+                  example: pwd
+      responses:
+        '200':
+          headers:
+            Authorization:
+              schema:
+                type: String
+                example: Bearer eyJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJTaW1hYyIsImF1dGhvcml0aWVzIjpbIlJPTEVfVVNFUiJdLCJpYXQiOjE1NTUyNTk2OTMsImV4cCI6MTU1NTM0NjA5M30.QhpSea6RMjVKQoZeLjOMTvmuq6sZDOMONdzNWfRC57shIti4wVC5NKJR5P8dbMAMAoks4ikc7dtimFYNnzIl8ZFH9jL1Tzg5tUZM0vhR42stis3d8BqXWkKpPKQrvej3MP2tkTywlZZbIieoum-9raCZZufoGk6qQWOZSUYTS0CxH9cmSVFncqLdaczJ4WfmqQA0LkAz8ez9GJtHjZ5WylDR1pOsNQ70ydRWAI-QhVtEFNqpJgg_vPUN__x2H4giIz_M6YC2_fXG4rLS_lp4_0QmVMrPQ4uXo6rfsdBh4cGOcn8mOuu9Qh4X2Af8bWaFkVBkw1UK_SjmELmsv4KZlw
+  /auth/signup:
+    post:
+      tags:
+        - Auth
+      summary: POST /auth/signup
+      description: Регистрация нового пользователя
+      requestBody:
+        content:
+          application/json:
             schema:
-              type: string
-              example: Hello world!
-        description: Echo payload
+              properties:
+                name:
+                  type: String
+                  required: true
+                  example: user
+                password:
+                  type: String
+                  required: true
+                  example: pwd
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: String
+              example: User created
+  /social/chats:
+    get:
+      tags:
+        - Chats
+      summary: GET /social/chats
+      description: Получить список чатов текущего пользователя
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  successful:
+                    type: boolean
+                    example: true
+                  data:
+                    type: array
+                    items:
+                      - type: object
+                        example:
+                          ChatId: 1
+                          chatName: Имя для чата
+                          owner:
+                            username: Simac
+                      - type: object
+                        example:
+                          ChatId: 2
+                          chatName: Имя для чата 2
+                          owner:
+                            username: Ira
+    post:
+      tags:
+        - Chats
+      summary: POST /social/chats
+      description: Создание нового чата
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                chatName:
+                  type: String
+                  required: true
+                  example: Имя для чата
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  successful:
+                    type: boolean
+                    example: true
+                  data:
+                    type: object
+                    example:
+                      ChatId: 2
+                      chatName: Имя для чата
+                      owner:
+                        username: Simac
+  '/social/chats/{chatId}/messages':
+    parameters:
+      - in: path
+        name: chatId
         required: true
-      x-code-samples:
-        - lang: 'C#'
-          source: |
-            API.v1.Echo echo = new API.v1.Echo();
-            echo.message = "Hello World!");
-            EchoResponse response = echo.post();
-            if (response.statusCode == HttpStatusCode.Created)
-            {
-              // Success
-            }
-            else
-            {
-              // Something wrong -- check response for errors
-              Console.WriteLine(response.getRawResponse());
-            }
-        - lang: PHP
-          source: |
-            $form = new \API\Entities\Echo();
-            $form->setMessage("Hello World!");
-            try {
-                $pet = $client->echo()->post($form);
-            } catch (UnprocessableEntityException $e) {
-                var_dump($e->getErrors());
-            }
+        schema:
+          type: integer
+    get:
+      tags:
+        - Chat Messages
+      summary: 'GET /social/chats/{chatId}/messages'
+      parameters:
+        - in: query
+          description: 'Unix time в миллисекундах, с которого нужно вернуть пачку сообщений'
+          name: since
+          required: true
+          schema:
+            type: long
+      description: Получить список участников чата
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  successful:
+                    type: boolean
+                    example: true
+                  data:
+                    type: array
+                    items:
+                      - type: object
+                        example:
+                          messageId: 25
+                          sender:
+                            username: Simac
+                          content: Привет
+                          chat:
+                            chatId: 2
+                            chatName: Название для чата
+                            owner:
+                              username: Ira
+                          sendTime: 1554315321762
+                          type: CHAT
+                      - type: object
+                        example:
+                          messageId: 24
+                          sender:
+                            username: Simac
+                          content: Ira добавил(а) simac в чат
+                          chat:
+                            chatId: 2
+                            chatName: Название для чата
+                            owner:
+                              username: Ira
+                          sendTime: 1554315321761
+                          type: CHAT
+                      - type: object
+                        example:
+                          messageId: 23
+                          sender:
+                            username: Simac
+                          content: Ira добавил(а) simac в чат
+                          chat:
+                            chatId: 2
+                            chatName: Название для чата
+                            owner:
+                              username: Ira
+                          sendTime: 1554315321760
+                          type: JOIN
+  '/social/chats/{chatId}/participants':
+    parameters:
+      - in: path
+        name: chatId
+        required: true
+        schema:
+          type: integer
+    get:
+      tags:
+        - Chat Participants
+      summary: 'GET /social/chats/{chatId}/participants'
+      description: Получить список участников чата
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  successful:
+                    type: boolean
+                    example: true
+                  data:
+                    type: array
+                    items:
+                      - type: object
+                        example:
+                          username: Simac
+                      - type: object
+                        example:
+                          username: Ira
+    post:
+      tags:
+        - Chat Participants
+      summary: 'POST /social/chats/{chatId}/participants'
+      description: Добавить участника в чат. Возвращает обновленный список участников
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                username:
+                  type: String
+                  required: true
+                  example: Simac
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  successful:
+                    type: boolean
+                    example: true
+                  data:
+                    type: array
+                    items:
+                      - type: object
+                        example:
+                          username: Simac
+                      - type: object
+                        example:
+                          username: Ira
+    delete:
+      tags:
+        - Chat Participants
+      summary: 'DELETE /social/chats/{chatId}/participants'
+      description: 'Удаляет участника из чата. Можно выйти самому, либо админ может удалить любого. Возвращает обновленный список участников'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                username:
+                  type: String
+                  required: true
+                  example: Simac
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  successful:
+                    type: boolean
+                    example: true
+                  data:
+                    type: array
+                    items:
+                      - type: object
+                        example:
+                          username: Ira
+  '/social/chats/{chatId}/playlist':
+    parameters:
+      - in: path
+        name: chatId
+        required: true
+        schema:
+          type: integer
+    get:
+      tags:
+        - Chat Playlist
+      summary: 'GET /social/chats/{chatId}/playlist'
+      description: Получить список участников чата
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  successful:
+                    type: boolean
+                    example: true
+                  data:
+                    type: array
+                    items:
+                      - type: object
+                        example:
+                          username: Simac
+                      - type: object
+                        example:
+                          username: Ira
+    post:
+      tags:
+        - Chat Playlist
+      summary: 'POST /social/chats/{chatId}/playlist'
+      description: Добавить участника в чат. Возвращает обновленный список участников
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                username:
+                  type: String
+                  required: true
+                  example: Simac
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  successful:
+                    type: boolean
+                    example: true
+                  data:
+                    type: array
+                    items:
+                      - type: object
+                        example:
+                          username: Simac
+                      - type: object
+                        example:
+                          username: Ira
+    delete:
+      tags:
+        - Chat Playlist
+      summary: 'DELETE /social/chats/{chatId}/playlist'
+      description: 'Удаляет участника из чата. Можно выйти самому, либо админ может удалить любого. Возвращает обновленный список участников'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                username:
+                  type: String
+                  required: true
+                  example: Simac
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  successful:
+                    type: boolean
+                    example: true
+                  data:
+                    type: array
+                    items:
+                      - type: object
+                        example:
+                          username: Ira
   '/users/{username}':
     parameters:
       - name: pretty_print
@@ -220,18 +529,7 @@ components:
         type: string
         format: date-time
   securitySchemes:
-    api_key:
-      type: apiKey
-      in: header
-      name: api_key
-    basic_auth:
+    bearer:
       type: http
-      scheme: basic
-    main_auth:
-      type: oauth2
-      flows:
-        implicit:
-          authorizationUrl: 'http://example.com/api/oauth/dialog'
-          scopes:
-            'read:users': read users info
-            'write:users': modify or remove users
+      scheme: bearer
+      bearerFormat: JWT
